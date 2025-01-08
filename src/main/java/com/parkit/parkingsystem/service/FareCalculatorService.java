@@ -5,15 +5,13 @@ import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
 
-  public void calculateFare(Ticket ticket) {
+  public void calculateFare(Ticket ticket, boolean discount) {
     if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
       throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime().toString());
     }
 
     long inTimeMillis = ticket.getInTime().getTime();
     long outTimeMillis = ticket.getOutTime().getTime();
-
-    // TODO: Some tests are failing here. Need to check if this logic is correct
 
     if (outTimeMillis <= inTimeMillis) {
       throw new IllegalArgumentException("Out time must be after in time");
@@ -31,6 +29,7 @@ public class FareCalculatorService {
     // Gratuit pour les parkings de 30 minutes ou moins, sinon appliquer le tarif horaire
     // Durée en heure
     double lessThan30Min = 0.5;
+
 
     double price = 0;
     switch (ticket.getParkingSpot().getParkingType()) {
@@ -50,6 +49,11 @@ public class FareCalculatorService {
         break;
       default:
         throw new IllegalArgumentException("Unkown Parking Type");
+    }
+
+    //Si discount est truthy, appliquer la réduction de 5%
+    if (discount && (duration > lessThan30Min)) {
+        price = price * 0.95; // 5% de reduction
     }
 
     ticket.setPrice(price);
