@@ -58,4 +58,8 @@ public class FareCalculatorService {
 
     ticket.setPrice(price);
   }
+
+  public void calculateFare(Ticket ticket) {
+    calculateFare(ticket, false);
+}
 }
