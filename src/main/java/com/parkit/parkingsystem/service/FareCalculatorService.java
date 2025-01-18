@@ -26,10 +26,10 @@ public class FareCalculatorService {
       throw new IllegalArgumentException("Parking time must be positive");
     }
 
-    // Gratuit pour les parkings de 30 minutes ou moins, sinon appliquer le tarif horaire
+    // Gratuit pour les parkings de 30 minutes ou moins, sinon appliquer le tarif
+    // horaire
     // Durée en heure
     double lessThan30Min = 0.5;
-
 
     double price = 0;
     switch (ticket.getParkingSpot().getParkingType()) {
@@ -41,19 +41,19 @@ public class FareCalculatorService {
         }
         break;
       case BIKE:
-      if (duration < lessThan30Min) {
-        price = 0;
-      } else {
-        price = duration * Fare.BIKE_RATE_PER_HOUR;
-      }
+        if (duration < lessThan30Min) {
+          price = 0;
+        } else {
+          price = duration * Fare.BIKE_RATE_PER_HOUR;
+        }
         break;
       default:
         throw new IllegalArgumentException("Unkown Parking Type");
     }
 
-    //Si discount est truthy, appliquer la réduction de 5%
+    // Si discount est truthy, appliquer la réduction de 5%
     if (discount && (duration > lessThan30Min)) {
-        price = price * 0.95; // 5% de reduction
+      price = price * 0.95; // 5% de reduction
     }
 
     ticket.setPrice(price);
@@ -61,5 +61,5 @@ public class FareCalculatorService {
 
   public void calculateFare(Ticket ticket) {
     calculateFare(ticket, false);
-}
+  }
 }

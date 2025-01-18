@@ -28,11 +28,11 @@ public class ParkingService {
     this.ticketDAO = ticketDAO;
   }
 
-  public void processIncomingVehicle() {
+  public void processIncomingVehicle(String vehicleRegNumber) {
     try {
       ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
       if (parkingSpot != null && parkingSpot.getId() > 0) {
-        String vehicleRegNumber = getVehichleRegNumber();
+        // String vehicleRegNumber = getVehichleRegNumber();
         parkingSpot.setAvailable(false);
         parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as false
 
@@ -45,7 +45,16 @@ public class ParkingService {
         ticket.setPrice(0);
         ticket.setInTime(inTime);
         ticket.setOutTime(null);
+        logger.info("Saving ticket: " + ticket);
         ticketDAO.saveTicket(ticket);
+        logger.info("Ticket saved successfully");
+        Ticket savedTicket = ticketDAO.getTicket(vehicleRegNumber);
+        if (savedTicket != null) {
+            logger.info("Ticket retrieved successfully: " + savedTicket);
+        } else {
+            logger.error("Failed to retrieve the saved ticket for vehicle: " + vehicleRegNumber);
+        }
+
         if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
           System.out.println(
               "Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");

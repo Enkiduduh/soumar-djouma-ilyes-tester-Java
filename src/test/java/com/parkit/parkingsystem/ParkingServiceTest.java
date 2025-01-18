@@ -79,14 +79,14 @@ public class ParkingServiceTest {
       // Mock de l'entrée utilisateur pour le choix du type de véhicule
       when(inputReaderUtil.readSelection()).thenReturn(1); // 1 pour CAR
       // Mock de la récupération du numéro de plaque
-      when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+      Mockito.lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
       // Mock de l'attribution d'une place de parking disponible
       ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
       when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
       // Mock de la sauvegarde du ticket
       when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
       // Appel de la méthode à tester
-      parkingService.processIncomingVehicle();
+      parkingService.processIncomingVehicle("ABCDEF");
       // Vérification que `getNextAvailableSlot` a été appelée une fois
       verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(ParkingType.CAR);
       // Vérification que `updateParking` a été appelée pour marquer la place comme
@@ -103,7 +103,7 @@ public class ParkingServiceTest {
   @Test
   public void processExitingVehicleTestUnableUpdate() {
     try {
-      // Mock de création d'un ticket 
+      // Mock de création d'un ticket
       Ticket ticket = new Ticket();
       ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
       ticket.setVehicleRegNumber("ABCDEF");

@@ -1,10 +1,11 @@
 package com.parkit.parkingsystem.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
@@ -25,7 +26,7 @@ public class InteractiveShell {
             int option = inputReaderUtil.readSelection();
             switch(option){
                 case 1: {
-                    parkingService.processIncomingVehicle();
+                    parkingService.processIncomingVehicle("vehicleNumber");
                     break;
                 }
                 case 2: {
