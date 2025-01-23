@@ -34,11 +34,14 @@ public class TicketDAO {
       ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
       ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
       logger.info("Executing query: " + ps);
-      con.setAutoCommit(false);
-      ps.execute();
-      con.commit();
-      logger.info("Ticket saved successfully");
-      return true;
+      int rowsAffected = ps.executeUpdate();
+      if (rowsAffected > 0) {
+        logger.info("Ticket saved successfully");
+        return true;
+      } else {
+        logger.error("No rows affected, ticket not saved");
+        return false;
+      }
     } catch (Exception ex) {
       logger.error("Error saving ticket", ex);
       return false;
@@ -75,6 +78,7 @@ public class TicketDAO {
         //D test
         System.out.println("All infos for ticket are ok");
       }
+      System.out.println("Ended connection DB");
       dataBaseConfig.closeResultSet(rs);
       dataBaseConfig.closePreparedStatement(ps);
       return ticket;
