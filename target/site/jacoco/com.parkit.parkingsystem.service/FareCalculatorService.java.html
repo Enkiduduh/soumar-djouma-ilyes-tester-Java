@@ -41,8 +41,8 @@ import com.parkit.parkingsystem.model.Ticket;
         }
 <span class="fc" id="L42">        break;</span>
       case BIKE:
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (duration &lt; lessThan30Min) {</span>
-<span class="fc" id="L45">          price = 0;</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (duration &lt; lessThan30Min) {</span>
+<span class="nc" id="L45">          price = 0;</span>
         } else {
 <span class="fc" id="L47">          price = duration * Fare.BIKE_RATE_PER_HOUR;</span>
         }
@@ -52,7 +52,7 @@ import com.parkit.parkingsystem.model.Ticket;
     }
 
     // Si discount est truthy, appliquer la réduction de 5%
-<span class="fc bfc" id="L55" title="All 4 branches covered.">    if (discount &amp;&amp; (duration &gt; lessThan30Min)) {</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">    if (discount &amp;&amp; (duration &gt; lessThan30Min)) {</span>
 <span class="fc" id="L56">      price = price * 0.95; // 5% de reduction</span>
     }
 
