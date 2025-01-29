@@ -120,9 +120,9 @@ public class ParkingDataBaseIT {
         "La place de parking devrait être marquée comme non disponible.");
 
     // Vérification que la place de parking est mise à jour
-    // ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
-    // assertNotNull(parkingSpot, "La place de parking associée au ticket devrait exister dans la base.");
-    // assertFalse(parkingSpot.isAvailable(), "La place de parking devrait être mise à jour comme non disponible.");
+    ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
+    assertNotNull(parkingSpot, "La place de parking associée au ticket devrait exister dans la base.");
+    assertFalse(parkingSpot.isAvailable(), "La place de parking devrait être mise à jour comme non disponible.");
   }
 
   @Test
@@ -152,17 +152,14 @@ public class ParkingDataBaseIT {
     assertTrue(ticket.getOutTime().after(ticket.getInTime()), "L'heure de sortie devrait être postérieure à l'heure d'entrée.");
     assertTrue(ticket.getPrice() > 0, "Le tarif devrait être calculé et supérieur à 0.");
 
-  // // Utilisation de getNextAvailableSlot pour obtenir l'ID d'une place de parking disponible
-  // ParkingType parkingType = ticket.getParkingSpot().getParkingType();
-  // int nextAvailableSlotId = parkingSpotDAO.getNextAvailableSlot(parkingType);
+  // Utilisation de getNextAvailableSlot pour obtenir l'ID d'une place de parking disponible
+  ParkingType parkingType = ticket.getParkingSpot().getParkingType();
+  int nextAvailableSlotId = parkingSpotDAO.getNextAvailableSlot(parkingType);
 
-  // // Vérification que l'ID de la place de parking récupérée est valide
-  // assertTrue(nextAvailableSlotId > 0, "L'ID de la place de parking suivante devrait être valide.");
-
-  // // Vérification de la place de parking
-  // ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
-  // assertNotNull(parkingSpot, "La place de parking associée devrait être récupérée.");
-  // assertTrue(parkingSpot.isAvailable(), "La place de parking devrait être marquée comme disponible après la sortie du véhicule.");
+  // Vérification de la place de parking
+  ParkingSpot parkingSpot = parkingSpotDAO.getParkingSpot(ticket.getParkingSpot().getId());
+  assertNotNull(parkingSpot, "La place de parking associée devrait être récupérée.");
+  assertTrue(parkingSpot.isAvailable(), "La place de parking devrait être marquée comme disponible après la sortie du véhicule.");
   }
 
   @Test
@@ -170,7 +167,7 @@ public class ParkingDataBaseIT {
     ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
     FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
-    //  Simulationb d'un ticket déjà existant
+    //  Simulation d'un ticket déjà existant
     Ticket firstTicket = new Ticket();
     Date firstInTime = new Date();
     Calendar calendar = Calendar.getInstance();
@@ -187,7 +184,7 @@ public class ParkingDataBaseIT {
     ticketDAO.saveTicket(firstTicket); // Sauvegarder le ticket initial en base
     assertTrue(ticketDAO.getNbTicket("ABCDEF") > 0, "Il doit déjà y avoir au moins 1 ticket existant");
 
-    // Étape 2 : Simuler une nouvelle entrée dans le parking
+    // Simuler une nouvelle entrée dans le parking
     parkingService.processIncomingVehicle("ABCDEF");
 
     // Obtenir l'heure d'entrée (maintenant)
@@ -207,7 +204,7 @@ public class ParkingDataBaseIT {
     // Sauvegarder le ticket mis à jour
     ticketDAO.updateTicket(currentTicket);
 
-    // Étape 3 : Vérifier le tarif final
+    // Vérifier le tarif final
     double expectedPrice = (2 * Fare.CAR_RATE_PER_HOUR) * 0.95; // 5% de remise
     assertEquals(expectedPrice, currentTicket.getPrice(), "Le tarif calculé pour l'utilisateur récurrent est incorrect.");
   }

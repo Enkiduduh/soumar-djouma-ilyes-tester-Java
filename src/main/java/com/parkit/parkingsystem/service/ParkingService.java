@@ -50,9 +50,9 @@ public class ParkingService {
         logger.info("Ticket saved successfully");
         Ticket savedTicket = ticketDAO.getTicket(vehicleRegNumber);
         if (savedTicket != null) {
-            logger.info("Ticket retrieved successfully: " + savedTicket);
+          logger.info("Ticket retrieved successfully: " + savedTicket);
         } else {
-            logger.error("Failed to retrieve the saved ticket for vehicle: " + vehicleRegNumber);
+          logger.error("Failed to retrieve the saved ticket for vehicle: " + vehicleRegNumber);
         }
 
         if (ticketDAO.getNbTicket(vehicleRegNumber) > 0) {
@@ -136,5 +136,9 @@ public class ParkingService {
     } catch (Exception e) {
       logger.error("Unable to process exiting vehicle", e);
     }
+  }
+
+  public ParkingSpot getParkingSpot(int id) {
+    return parkingSpotDAO.getParkingSpot(id);
   }
 }
